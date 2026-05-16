@@ -402,24 +402,8 @@
       padding: 18px;
     }
 
-    .reader-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 3;
-      width: 58px;
-      height: 58px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 220, 131, .32);
-      background: rgba(8,7,4,.72);
-      color: var(--gold2);
-      font-size: 34px;
-      font-weight: 900;
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      opacity: 0;
-      pointer-events: none;
+    .reader-arrow {$1opacity: 1;
+      pointer-events: auto;
       transition: .22s ease;
       box-shadow: 0 14px 40px rgba(0,0,0,.42);
       backdrop-filter: blur(10px);
@@ -428,10 +412,7 @@
     .reader-arrow.left { left: 20px; }
     .reader-arrow.right { right: 20px; }
 
-    .book-view.show-arrows .reader-arrow {
-      opacity: 1;
-      pointer-events: auto;
-    }
+    
 
     .reader-arrow:hover {
       transform: translateY(-50%) scale(1.06);
@@ -669,20 +650,17 @@
         padding: 18px;
         border-radius: 18px;
       }
-    }
-      .hero, section { padding-left: 14px; padding-right: 14px; }
-      .reader-shell { padding: 12px; border-radius: 22px; }
-      .reader-toolbar,
-      .toolbar-left,
-      .toolbar-right { width: 100%; }
-      .btn,
-      input,
-      .page-counter { width: 100%; text-align: center; justify-content: center; }
-      .book-card img { height: min(70vh, 560px) !important; }
-    }
-  
 
-    /* 🇭🇺 Corner flags */
+      .hero,
+      section {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .book-card img {
+        height: min(70vh, 560px) !important;
+      }
+    }/* 🇭🇺 Corner flags */
     .flag {
       position: fixed;
       width: 80px;
@@ -873,7 +851,7 @@
         pagePlaceholder: "Oldalszám",
         missingTitle: "Még nincs feltöltve ez az oldal",
         missingText: "Rakd be a képeket az images/book/ mappába ilyen nevekkel: page-001.jpg, page-002.jpg, ... page-135.jpg.",
-        hint: "Tipp: kattints az oldalra, és megjelennek a bal/jobb lapozó nyilak. A billentyűzeten a ← és → nyilak is működnek.",
+        hint: "Tipp: a bal és jobb oldali nyilakkal lapozhatsz. A billentyűzeten a ← és → nyilak is működnek.",
         printBlocked: "A böngésző letiltotta az új nyomtatási ablakot. Engedélyezd a felugró ablakokat, vagy próbáld újra.",
         printError: "Nem sikerült megnyitni a nyomtatást."
       },
@@ -906,7 +884,7 @@
         pagePlaceholder: "Broj stranice",
         missingTitle: "Ova stranica još nije postavljena",
         missingText: "Stavi slike u folder images/book/ sa nazivima: page-001.jpg, page-002.jpg, ... page-135.jpg.",
-        hint: "Savet: klikni na stranicu i pojaviće se strelice za listanje. Možeš koristiti i strelice ← i → na tastaturi.",
+        hint: "Savet: koristi leve i desne strelice za listanje. Možeš koristiti i strelice ← i → na tastaturi.",
         printBlocked: "Pregledač je blokirao novi prozor za štampanje. Dozvoli iskačuće prozore ili pokušaj ponovo.",
         printError: "Štampanje nije uspelo."
       }
@@ -995,8 +973,6 @@
       safeSetValue(pageInput, displayPage);
 
       if (pageImage) {
-        pageImage.classList.remove("zoomed");
-        if (bookView) bookView.classList.remove("show-arrows");
         pageImage.style.opacity = "0";
         pageImage.src = getPageSrc(currentImagePage);
         pageImage.alt = `${translations[currentLang].brand} ${displayPage}. oldal`;
@@ -1066,9 +1042,7 @@
         if (emptyPage) emptyPage.style.display = "block";
       };
 
-      pageImage.addEventListener("click", () => {
-        if (bookView) bookView.classList.toggle("show-arrows");
-      });
+      
     }
 
     if (prevBtn) prevBtn.addEventListener("click", () => goToImagePage(currentImagePage - 1));
