@@ -402,6 +402,43 @@
       padding: 18px;
     }
 
+    .reader-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 3;
+      width: 58px;
+      height: 58px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 220, 131, .32);
+      background: rgba(8,7,4,.72);
+      color: var(--gold2);
+      font-size: 34px;
+      font-weight: 900;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: .22s ease;
+      box-shadow: 0 14px 40px rgba(0,0,0,.42);
+      backdrop-filter: blur(10px);
+    }
+
+    .reader-arrow.left { left: 20px; }
+    .reader-arrow.right { right: 20px; }
+
+    .book-view.show-arrows .reader-arrow {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .reader-arrow:hover {
+      transform: translateY(-50%) scale(1.06);
+      border-color: rgba(255, 220, 131, .65);
+      box-shadow: 0 0 28px rgba(217,164,65,.24);
+    }
+
     .book-view::before {
       content: "";
       position: absolute;
@@ -421,11 +458,7 @@
       z-index: 1;
     }
 
-    .page-img.zoomed {
-      transform: scale(1.35);
-      cursor: zoom-out;
-    }
-
+    
     .empty-page {
       text-align: center;
       max-width: 620px;
@@ -487,20 +520,156 @@
     }
 
     @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; padding-top: 58px; }
-      .book-card { transform: none; }
-      @keyframes float {
+      nav {
+        padding: 12px 14px;
+      }
+
+      .logo small {
+        display: none;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .nav-links a {
+        display: inline-flex;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 42px 16px 30px;
+        gap: 20px;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: clamp(36px, 12vw, 58px);
+        letter-spacing: -1.5px;
+      }
+
+      .hero p,
+      .section-desc {
+        font-size: 16px;
+      }
+
+      .hero-actions {
+        justify-content: center;
+      }
+
+      .book-card {
+        min-height: auto;
+        transform: none;
+        animation: floatMobile 5s ease-in-out infinite;
+      }
+
+      .book-card img {
+        height: auto !important;
+        width: min(78vw, 330px) !important;
+      }
+
+      @keyframes floatMobile {
         0%, 100% { transform: translateY(0); }
         50% { transform: translateY(-8px); }
       }
-      .features { grid-template-columns: 1fr; }
-      .nav-links { display: none; }
-      .book-view { min-height: 480px; }
-      .language-buttons { grid-template-columns: 1fr; }
+
+      section {
+        padding: 42px 16px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .reader-shell {
+        padding: 12px;
+        border-radius: 22px;
+      }
+
+      .reader-toolbar,
+      .toolbar-left,
+      .toolbar-right,
+      .print-row {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .book-view {
+        min-height: 360px;
+        padding: 10px;
+        border-radius: 18px;
+      }
+
+      .page-img {
+        max-height: 72vh;
+        border-radius: 8px;
+      }
+
+      .btn,
+      input,
+      .page-counter {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+      }
+
+      .print-row input {
+        width: 100%;
+      }
+
+      .language-box {
+        padding: 24px 18px;
+        border-radius: 24px;
+      }
+
+      .language-buttons {
+        grid-template-columns: 1fr;
+      }
+
+      .flag {
+        display: none;
+      }
     }
 
     @media (max-width: 520px) {
-      nav { padding: 14px; }
+      .logo-mark {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+      }
+
+      .logo {
+        gap: 8px;
+        font-size: 14px;
+        max-width: 48%;
+      }
+
+      .nav-links .btn,
+      .nav-links a {
+        padding: 8px 10px;
+        font-size: 13px;
+        width: auto;
+      }
+
+      .badge {
+        font-size: 14px;
+      }
+
+      .section-title {
+        font-size: 32px;
+      }
+
+      .feature,
+      .print-panel {
+        padding: 18px;
+        border-radius: 18px;
+      }
+    }
       .hero, section { padding-left: 14px; padding-right: 14px; }
       .reader-shell { padding: 12px; border-radius: 22px; }
       .reader-toolbar,
@@ -564,8 +733,8 @@
       <h1>Petőfi Szerbül</h1>
       <p>Válassz nyelvet / Izaberite jezik</p>
       <div class="language-buttons">
-        <button class="btn big primary" type="button" id="langHuBtn">Magyar 🇭🇺</button>
-        <button class="btn big" type="button" id="langSrBtn">Srpski 🇷🇸</button>
+        <button class="btn big primary" type="button" id="langHuBtn">Magyar</button>
+        <button class="btn big" type="button" id="langSrBtn">Srpski</button>
       </div>
     </div>
   </div>
@@ -585,7 +754,7 @@
       <div class="nav-links">
         <a href="#konyv" data-i18n="navBook">Könyv</a>
         <a href="#info" data-i18n="navInfo">Infó</a>
-        <button class="btn" type="button" id="openLangBtn" data-i18n="navLang">Nyelv 🇭🇺</button>
+        <button class="btn" type="button" id="openLangBtn" data-i18n="navLang">Nyelv</button>
       </div>
     </nav>
   </header>
@@ -595,7 +764,7 @@
       
       <div>
         <div class="badge" data-i18n="badge">📜 Online fordításgyűjtemény</div>
-        <h1><span data-i18n="heroTitle1">Petőfi Sándor versei</span> <span data-i18n="heroTitle2">szerbül</span></h1>
+        <h1><span data-i18n="heroTitle1">Petőfi versei</span> <span data-i18n="heroTitle2">szerbül</span></h1>
         <p data-i18n="heroText">Egy modern, lapozható online könyv Petőfi Sándor verseinek szerb fordításaihoz. A befotózott oldalak szépen, mobilon és gépen is olvasható formában jelennek meg.</p>
         <div class="hero-actions">
           <a class="btn primary" href="#konyv" data-i18n="openBook">📖 Könyv megnyitása</a>
@@ -609,7 +778,7 @@
 
     <section id="info">
       <h2 class="section-title" data-i18n="infoTitle">Mit tud az oldal?</h2>
-      <p class="section-desc" data-i18n="infoDesc">A cél, hogy a 136 oldalas könyv ne csak feltöltött képek halmaza legyen, hanem egy igényes, lapozható digitális kiadvány.</p>
+      <p class="section-desc" data-i18n="infoDesc">A cél, hogy a 135 oldalas könyv ne csak feltöltött képek halmaza legyen, hanem egy igényes, lapozható digitális kiadvány.</p>
       <div class="features">
         <div class="feature"><b data-i18n="f1Title">📖 Lapozható nézet</b><p data-i18n="f1Text">Előző/következő gombokkal, billentyűzettel és oldalszám alapján is lehet navigálni.</p></div>
         <div class="feature"><b data-i18n="f2Title">🔍 Nagyítás</b><p data-i18n="f2Text">Az oldal képére kattintva nagyítható a fotó, így a szöveg könnyebben olvasható.</p></div>
@@ -635,10 +804,12 @@
         </div>
 
         <div class="book-view" id="bookView">
+          <button class="reader-arrow left" id="readerPrevBtn" type="button" aria-label="Előző oldal">‹</button>
           <img id="pageImage" class="page-img" alt="Könyv oldal" />
+          <button class="reader-arrow right" id="readerNextBtn" type="button" aria-label="Következő oldal">›</button>
           <div class="empty-page" id="emptyPage" style="display: none;">
             <h3 data-i18n="missingTitle">Még nincs feltöltve ez az oldal</h3>
-            <p data-i18n="missingText">Rakd be a képeket az images/book/ mappába ilyen nevekkel: page-001.jpg, page-002.jpg, ... page-136.jpg.</p>
+            <p data-i18n="missingText">Rakd be a képeket az images/book/ mappába ilyen nevekkel: page-001.jpg, page-002.jpg, ... page-135.jpg.</p>
           </div>
         </div>
 
@@ -661,7 +832,7 @@
   <footer>© <span id="year"></span> <span data-i18n="brand">Petőfi Szerbül</span> — petofiszerbul.hu</footer>
 
   <script>
-    const TOTAL_IMAGES = 136;
+    const TOTAL_IMAGES = 135;
     const IMAGE_FOLDER = "images/book/";
     const IMAGE_PREFIX = "page-";
     const IMAGE_EXTENSION = ".jpg";
@@ -677,14 +848,14 @@
         brand: "Petőfi Szerbül",
         navBook: "Könyv",
         navInfo: "Infó",
-        navLang: "Nyelv 🇭🇺",
+        navLang: "Nyelv",
         badge: "📜 Online fordításgyűjtemény",
         heroTitle1: "Petőfi versei",
         heroTitle2: "szerbül",
         heroText: "Egy modern, lapozható online könyv Petőfi Sándor verseinek szerb fordításaihoz. A befotózott oldalak szépen, mobilon és gépen is olvasható formában jelennek meg.",
         openBook: "📖 Könyv megnyitása",
         infoTitle: "Mit tud az oldal?",
-        infoDesc: "A cél, hogy a 136 oldalas könyv ne csak feltöltött képek halmaza legyen, hanem egy igényes, lapozható digitális kiadvány.",
+        infoDesc: "A cél, hogy a 135 oldalas könyv ne csak feltöltött képek halmaza legyen, hanem egy igényes, lapozható digitális kiadvány.",
         f1Title: "📖 Lapozható nézet",
         f1Text: "Előző/következő gombokkal, billentyűzettel és oldalszám alapján is lehet navigálni.",
         f2Title: "🔍 Nagyítás",
@@ -701,8 +872,8 @@
         go: "Ugrás",
         pagePlaceholder: "Oldalszám",
         missingTitle: "Még nincs feltöltve ez az oldal",
-        missingText: "Rakd be a képeket az images/book/ mappába ilyen nevekkel: page-001.jpg, page-002.jpg, ... page-136.jpg.",
-        hint: "Tipp: használhatod a billentyűzeten a ← és → nyilakat is. Kattints az oldalra a nagyításhoz.",
+        missingText: "Rakd be a képeket az images/book/ mappába ilyen nevekkel: page-001.jpg, page-002.jpg, ... page-135.jpg.",
+        hint: "Tipp: kattints az oldalra, és megjelennek a bal/jobb lapozó nyilak. A billentyűzeten a ← és → nyilak is működnek.",
         printBlocked: "A böngésző letiltotta az új nyomtatási ablakot. Engedélyezd a felugró ablakokat, vagy próbáld újra.",
         printError: "Nem sikerült megnyitni a nyomtatást."
       },
@@ -710,11 +881,11 @@
         brand: "Petefi na srpskom",
         navBook: "Knjiga",
         navInfo: "Info",
-        navLang: "Jezik 🇷🇸",
+        navLang: "Jezik",
         badge: "📜 Online zbirka prevoda",
         heroTitle1: "Pesme Šandora Petefija",
-        heroTitle2: "na srpskom jeziku",
-        heroText: "Moderna online knjiga srpskih prevoda pesama Šandora Petefija. Fotografisane stranice se prikazuju čitko na telefonu i računaru.",
+        heroTitle2: "na srpskom",
+        heroText: "Moderna online knjiga za srpske prevode pesama Šandora Petefija. Fotografisane stranice se prikazuju lepo i čitljivo na telefonu i računaru.",
         openBook: "📖 Otvori knjigu",
         infoTitle: "Šta nudi stranica?",
         infoDesc: "Cilj je da knjiga od 136 stranica ne bude samo skup slika, već lepo digitalno izdanje koje može da se lista.",
@@ -734,8 +905,8 @@
         go: "Idi",
         pagePlaceholder: "Broj stranice",
         missingTitle: "Ova stranica još nije postavljena",
-        missingText: "Stavi slike u folder images/book/ sa nazivima: page-001.jpg, page-002.jpg, ... page-136.jpg.",
-        hint: "Savet: možeš koristiti i strelice ← i → na tastaturi. Klikni na stranicu za uvećanje.",
+        missingText: "Stavi slike u folder images/book/ sa nazivima: page-001.jpg, page-002.jpg, ... page-135.jpg.",
+        hint: "Savet: klikni na stranicu i pojaviće se strelice za listanje. Možeš koristiti i strelice ← i → na tastaturi.",
         printBlocked: "Pregledač je blokirao novi prozor za štampanje. Dozvoli iskačuće prozore ili pokušaj ponovo.",
         printError: "Štampanje nije uspelo."
       }
@@ -745,6 +916,9 @@
     let currentLang = localStorage.getItem("petofiLang") || "hu";
 
     const pageImage = document.getElementById("pageImage");
+    const bookView = document.getElementById("bookView");
+    const readerPrevBtn = document.getElementById("readerPrevBtn");
+    const readerNextBtn = document.getElementById("readerNextBtn");
     const emptyPage = document.getElementById("emptyPage");
     const pageCounter = document.getElementById("pageCounter");
     const pageInput = document.getElementById("pageInput");
@@ -789,9 +963,8 @@
       if (el) el.placeholder = value;
     }
 
-    function setLanguage(lang) {
+    function applyLanguage(lang, hideScreen = false) {
       currentLang = lang;
-      localStorage.setItem("petofiLang", lang);
       document.documentElement.lang = lang === "sr" ? "sr" : "hu";
 
       document.querySelectorAll("[data-i18n]").forEach((el) => {
@@ -803,8 +976,13 @@
       safeSetPlaceholder(printFrom, lang === "sr" ? "Od" : "Tól");
       safeSetPlaceholder(printTo, lang === "sr" ? "Do" : "Ig");
 
-      if (languageScreen) languageScreen.classList.add("hidden");
+      if (hideScreen && languageScreen) languageScreen.classList.add("hidden");
       updateReader();
+    }
+
+    function setLanguage(lang) {
+      localStorage.setItem("petofiLang", lang);
+      applyLanguage(lang, true);
     }
 
     function openLanguageScreen() {
@@ -818,6 +996,7 @@
 
       if (pageImage) {
         pageImage.classList.remove("zoomed");
+        if (bookView) bookView.classList.remove("show-arrows");
         pageImage.style.opacity = "0";
         pageImage.src = getPageSrc(currentImagePage);
         pageImage.alt = `${translations[currentLang].brand} ${displayPage}. oldal`;
@@ -888,12 +1067,14 @@
       };
 
       pageImage.addEventListener("click", () => {
-        pageImage.classList.toggle("zoomed");
+        if (bookView) bookView.classList.toggle("show-arrows");
       });
     }
 
     if (prevBtn) prevBtn.addEventListener("click", () => goToImagePage(currentImagePage - 1));
+    if (readerPrevBtn) readerPrevBtn.addEventListener("click", () => goToImagePage(currentImagePage - 1));
     if (nextBtn) nextBtn.addEventListener("click", () => goToImagePage(currentImagePage + 1));
+    if (readerNextBtn) readerNextBtn.addEventListener("click", () => goToImagePage(currentImagePage + 1));
     if (goBtn) goBtn.addEventListener("click", () => goToDisplayPage(pageInput.value));
     if (pageInput) pageInput.addEventListener("keydown", (event) => {
       if (event.key === "Enter") goToDisplayPage(pageInput.value);
@@ -941,7 +1122,7 @@
     if (yearEl) yearEl.textContent = new Date().getFullYear();
 
     runTests();
-    setLanguage(currentLang);
+    applyLanguage(currentLang, false);
   </script>
 </body>
 </html>
