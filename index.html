@@ -12,8 +12,11 @@
 <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Petőfi Szerbül | Online könyv</title>
-  <link rel="icon" type="image/png" href="logo.png">
-  <link rel="apple-touch-icon" href="logo.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/logo.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/logo.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/logo.png">
+  <meta name="msapplication-TileImage" content="https://petofiszerbul.hu/logo.png">
+  <meta name="theme-color" content="#14100a">
   <meta name="description" content="Petőfi Sándor versei szerb fordításban, online lapozható könyv formában. Magyar és szerb nyelvű digitális irodalmi gyűjtemény." />
   <meta name="keywords" content="Petőfi szerbül, Petőfi versek szerbül, Petőfi Sándor szerb fordítás, Šandor Petefi pesme, Petefi na srpskom, petofiszerbul.hu" />
   <meta name="author" content="Petőfi Szerbül" />
@@ -364,50 +367,80 @@
       gap: 18px;
     }
 
-    .poem-list {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
+    .petofi-book-layout {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      background: rgba(255, 244, 218, .055);
+      border: 1px solid rgba(255, 220, 131, .14);
+      box-shadow: var(--shadow);
     }
 
-    .poem-link,
-    .poem-detail-card {
-      padding: 18px;
-      border-radius: 22px;
-      background: var(--card);
-      border: 1px solid rgba(255, 220, 131, .13);
-      box-shadow: 0 14px 40px rgba(0,0,0,.20);
-    }
-
-    .poem-link {
-      color: var(--text);
-      text-decoration: none;
+    .petofi-title-ribbon {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 14px;
-      transition: .22s ease;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 18px 26px;
+      background: linear-gradient(135deg, rgba(255,220,131,.85), rgba(217,164,65,.55));
+      color: #1d1306;
+      border-bottom: 1px solid rgba(255, 220, 131, .25);
+      clip-path: polygon(0 0, 96% 0, 100% 100%, 0% 100%);
+      margin-right: 24px;
     }
 
-    .poem-link:hover {
-      transform: translateY(-2px);
-      border-color: rgba(255, 220, 131, .42);
-      box-shadow: 0 0 24px rgba(217,164,65,.16);
+    .petofi-title-ribbon h2 {
+      font-size: clamp(28px, 4vw, 46px);
+      letter-spacing: -1px;
+      line-height: 1;
+      margin: 0;
     }
 
-    .poem-link strong {
-      color: var(--gold2);
-      font-size: 18px;
+    .petofi-title-ribbon span {
+      font-size: 46px;
+      font-weight: 900;
+      opacity: .45;
+      letter-spacing: -10px;
     }
 
-    .poem-link small {
+    .about-card {
+      padding: 30px;
       color: var(--muted);
-      white-space: nowrap;
+      font-size: 18px;
+      line-height: 1.85;
     }
 
-    .poem-detail-card {
-      max-width: 900px;
-      margin: auto;
+    .petofi-article {
+      background: rgba(255, 244, 218, .035);
+      border: none;
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    .petofi-portrait-inline {
+      float: right;
+      width: min(28%, 250px);
+      margin: 0 0 18px 28px;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(255, 244, 218, .08);
+      border: 1px solid rgba(255, 220, 131, .14);
+      box-shadow: 0 18px 45px rgba(0,0,0,.35);
+    }
+
+    .petofi-portrait-inline img {
+      width: 100%;
+      display: block;
+      border-radius: 12px;
+      object-fit: cover;
+    }
+
+    .petofi-portrait-inline figcaption {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.35;
+      font-style: italic;
     }
 
     .feature {
@@ -667,9 +700,20 @@
         padding: 42px 16px;
       }
 
-      .features,
-      .poem-list {
+      .features {
         grid-template-columns: 1fr;
+      }
+
+      .petofi-title-ribbon {
+        margin-right: 0;
+        clip-path: none;
+        padding: 16px 18px;
+      }
+
+      .petofi-portrait-inline {
+        float: none;
+        width: 100%;
+        margin: 0 0 18px 0;
       }
 
       .reader-shell {
@@ -838,7 +882,7 @@
       <div class="nav-links">
         <a href="#konyv" data-i18n="navBook">Könyv</a>
         <a href="#info" data-i18n="navInfo">Infó</a>
-        <a href="#versek" data-i18n="navPoems">Versek</a>
+        
         <button class="btn" type="button" id="openLangBtn" data-i18n="navLang">Nyelv</button>
       </div>
     </nav>
@@ -871,22 +915,29 @@
       </div>
     </section>
 
-    <section id="versek">
-      <h2 class="section-title" data-i18n="poemsTitle">Versek</h2>
-      <p class="section-desc" data-i18n="poemsDesc">Itt jelennek meg a versek külön URL-ekkel. A címeket a data.js fájlból olvassa be az oldal.</p>
-      <div class="poem-list" id="poemList"></div>
-    </section>
-
-    <section id="poemDetail" class="poem-detail-section" style="display:none;">
-      <div class="poem-detail-card">
-        <button class="btn" id="backToPoemsBtn" type="button">← Versek listája</button>
-        <h2 class="section-title" id="poemDetailTitle">Vers címe</h2>
-        <p class="section-desc" id="poemDetailMeta"></p>
-        <div class="hero-actions">
-          <button class="btn primary" id="openPoemPageBtn" type="button">📖 Oldal megnyitása</button>
-          <button class="btn" id="copyPoemLinkBtn" type="button">🔗 Link másolása</button>
+    <section id="petofirol">
+      <div class="petofi-book-layout">
+        <div class="petofi-title-ribbon">
+          <h2 data-i18n="aboutPetofiTitle">Petőfi Sándorról</h2>
+          <span>❯❯</span>
         </div>
-        <p class="hint" id="copyLinkMessage"></p>
+
+        <div class="about-card petofi-article">
+          <figure class="petofi-portrait-inline">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKeGocK3MpgUglZZzofcVmh-7RFF-zvAT4dw&s" alt="Petőfi Sándor portré" />
+            <figcaption>Petőfi Sándor,<br>Orlay Petrik Soma festménye, 1847</figcaption>
+          </figure>
+
+          <p data-i18n="aboutPetofiText">
+            Petőfi Sándor 1823. január 1-jén született Kiskőrösön. Rövidesen Kiskunfélegyházára költöztek, ezért Petőfi ezt a várost tartotta születési helyének. Apja, Petrovics István jómódú mészáros, anyja, Hrúz Mária cselédlány volt.<br><br>
+            Iskolái közül kiemelkedett Aszód, mert itt volt először szerelmes, itt próbálkozott versírással, és itt döntötte el, hogy színésznek áll. 1838-ban a dunai árvíz miatt apja csődbe ment. Petőfi először színésznek, majd később Sopronban katonának állt.<br><br>
+            1841-ben Pápán barátságot kötött Jókai Mórral. Első verse 1842-ben Borozó címmel még Petrovics néven jelent meg. Később magyarosította nevét Petőfire. Többször próbálkozott vándorszínészettel, majd 1844-ben Vörösmarty segítségével a Pesti Divatlap segédszerkesztője lett.<br><br>
+            Megjelent a János vitéz és Az alföld című műve, amelyeknek köszönhetően országos hírű költővé vált. 1845-ben több kritika érte, és ekkor írta a Felhők-ciklus verseit.<br><br>
+            1846-ban Erdődön megismerkedett Szendrey Júliával. Ekkor írta több híres versét is, például a Reszket a bokor, mert..., az Egy gondolat bánt engemet és a Szabadság, szerelem! című műveket.<br><br>
+            1847 szeptemberében házasodtak össze. A mézeshetek alatt írta a Szeptember végén című verset. Az 1848-as forradalom idején Petőfi vezető szerepet vállalt, legismertebb forradalmi műve a Nemzeti dal.<br><br>
+            1849-ben Bem József seregéhez csatlakozott. 1849. július 31-én Segesvárnál tűnt el a csatában, és a magyar történelem egyik legismertebb költőjeként emlékezünk rá.
+          </p>
+        </div>
       </div>
     </section>
 
@@ -954,7 +1005,7 @@
         brand: "Petőfi Szerbül",
         navBook: "Könyv",
         navInfo: "Infó",
-        navPoems: "Versek",
+        
         navLang: "Nyelv",
         badge: "📜 Online fordításgyűjtemény",
         heroTitle1: "Petőfi versei",
@@ -969,14 +1020,8 @@
         f2Text: "Az oldal képére kattintva nagyítható a fotó, így a szöveg könnyebben olvasható.",
         f3Title: "🖨️ Nyomtatás",
         f3Text: "Az aktuális oldal vagy egy teljes oldaltartomány is kinyomtatható.",
-        poemsTitle: "Versek",
-        poemsDesc: "Itt jelennek meg a versek külön URL-ekkel. A címeket a data.js fájlból olvassa be az oldal.",
-        poemPageText: "oldal",
-        poemListBack: "← Versek listája",
-        openPoemPage: "📖 Oldal megnyitása",
-        copyPoemLink: "🔗 Link másolása",
-        copiedText: "Link kimásolva.",
-        noPoemsText: "Még nincs feltöltve verslista. Hozz létre egy data.js fájlt PETOFI_POEMS listával.",
+        aboutPetofiTitle: "Petőfi Sándorról",
+        aboutPetofiText: `Petőfi Sándor 1823. január 1-jén született Kiskőrösön. Rövidesen Kiskunfélegyházára költöztek, ezért Petőfi ezt a várost tartotta születési helyének. Apja, Petrovics István jómódú mészáros, anyja, Hrúz Mária cselédlány volt.<br><br>Iskolái közül kiemelkedett Aszód, mert itt volt először szerelmes, itt próbálkozott versírással, és itt döntötte el, hogy színésznek áll. 1838-ban a dunai árvíz miatt apja csődbe ment. Petőfi először színésznek, majd később Sopronban katonának állt.<br><br>1841-ben Pápán barátságot kötött Jókai Mórral. Első verse 1842-ben Borozó címmel még Petrovics néven jelent meg. Később magyarosította nevét Petőfire. Többször próbálkozott vándorszínészettel, majd 1844-ben Vörösmarty segítségével a Pesti Divatlap segédszerkesztője lett.<br><br>Megjelent a János vitéz és Az alföld című műve, amelyeknek köszönhetően országos hírű költővé vált. 1845-ben több kritika érte, és ekkor írta a Felhők-ciklus verseit.<br><br>1846-ban Erdődön megismerkedett Szendrey Júliával. Ekkor írta több híres versét is, például a Reszket a bokor, mert..., az Egy gondolat bánt engemet és a Szabadság, szerelem! című műveket.<br><br>1847 szeptemberében házasodtak össze. A mézeshetek alatt írta a Szeptember végén című verset. Az 1848-as forradalom idején Petőfi vezető szerepet vállalt, legismertebb forradalmi műve a Nemzeti dal.<br><br>1849-ben Bem József seregéhez csatlakozott. 1849. július 31-én Segesvárnál tűnt el a csatában, és a magyar történelem egyik legismertebb költőjeként emlékezünk rá.`, 
         bookTitle: "Online könyv",
         bookDesc: "Itt tudod lapozni a könyvet, nagyítani az oldalakat, és oldalakat nyomtatni.",
         printTitle: "Nyomtatás",
@@ -996,7 +1041,7 @@
         brand: "Petefi na srpskom",
         navBook: "Knjiga",
         navInfo: "Info",
-        navPoems: "Pesme",
+        
         navLang: "Jezik",
         badge: "📜 Online zbirka prevoda",
         heroTitle1: "Pesme Šandora Petefija",
@@ -1011,14 +1056,8 @@
         f2Text: "Klikom na stranicu fotografija se uvećava, pa je tekst lakše čitati.",
         f3Title: "🖨️ Štampanje",
         f3Text: "Možeš štampati trenutnu stranicu ili opseg stranica.",
-        poemsTitle: "Pesme",
-        poemsDesc: "Ovde se prikazuju pesme sa posebnim URL adresama. Naslovi se učitavaju iz data.js fajla.",
-        poemPageText: "stranica",
-        poemListBack: "← Lista pesama",
-        openPoemPage: "📖 Otvori stranicu",
-        copyPoemLink: "🔗 Kopiraj link",
-        copiedText: "Link je kopiran.",
-        noPoemsText: "Lista pesama još nije dodata. Napravi data.js fajl sa PETOFI_POEMS listom.",
+        aboutPetofiTitle: "O Šandoru Petefiju",
+        aboutPetofiText: `Šandor Petefi rođen je 1. januara 1823. godine u Kiškeresu. Ubrzo nakon toga njegova porodica se preselila u Kiškunfelenjhazu, pa je Petefi taj grad smatrao svojim rodnim mestom. Njegov otac, Ištvan Petrović, bio je imućni mesar, dok je njegova majka Marija Hrúz radila kao služavka.<br><br>Među školama koje je pohađao posebno se isticao Ašod, jer se tamo prvi put zaljubio, počeo da piše pesme i odlučio da postane glumac. Godine 1838. njegov otac je bankrotirao zbog velike poplave Dunava. Petefi je najpre radio kao glumac, a kasnije je postao vojnik u Šopronu.<br><br>Godine 1841. u Papi se sprijateljio sa Morom Jokaiem. Njegova prva pesma, Borozó, objavljena je 1842. godine pod prezimenom Petrović. Kasnije je promenio ime u Petefi. Više puta je pokušavao da radi kao putujući glumac, a 1844. godine, uz pomoć Mihalja Vöröšmartija, postao je pomoćni urednik lista Pesti Divatlap.<br><br>Objavljena su njegova dela Janoš Vitez i Alföld, zahvaljujući kojima je postao poznat širom zemlje. Godine 1845. bio je izložen mnogim kritikama, a tada je napisao ciklus pesama Oblaci.<br><br>Godine 1846. upoznao je Juliju Sendrei u Erdedu. Tada je napisao i nekoliko svojih poznatih pesama, među kojima su Reszket a bokor, mert..., Jedna misao me muči i Sloboda, ljubav!.<br><br>U septembru 1847. godine venčao se sa Julijom. Tokom medenog meseca napisao je pesmu Krajem septembra. Tokom revolucije 1848. godine Petefi je imao vodeću ulogu, a njegovo najpoznatije revolucionarno delo je Nacionalna pesma.<br><br>Godine 1849. pridružio se vojsci Jožefa Bema. Dana 31. jula 1849. nestao je u bici kod Šegešvara i ostao upamćen kao jedan od najpoznatijih mađarskih pesnika.`, 
         bookTitle: "Online knjiga",
         bookDesc: "Ovde možeš listati knjigu, uvećavati stranice i štampati stranice.",
         printTitle: "Štampanje",
