@@ -32,6 +32,8 @@
   <meta name="twitter:description" content="Petőfi Sándor versei szerb fordításban, online lapozható könyvként." />
   <meta name="twitter:image" content="https://petofiszerbul.hu/logo.png" />
 
+  <script src="data.js"></script>
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -362,6 +364,52 @@
       gap: 18px;
     }
 
+    .poem-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .poem-link,
+    .poem-detail-card {
+      padding: 18px;
+      border-radius: 22px;
+      background: var(--card);
+      border: 1px solid rgba(255, 220, 131, .13);
+      box-shadow: 0 14px 40px rgba(0,0,0,.20);
+    }
+
+    .poem-link {
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      transition: .22s ease;
+    }
+
+    .poem-link:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 220, 131, .42);
+      box-shadow: 0 0 24px rgba(217,164,65,.16);
+    }
+
+    .poem-link strong {
+      color: var(--gold2);
+      font-size: 18px;
+    }
+
+    .poem-link small {
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .poem-detail-card {
+      max-width: 900px;
+      margin: auto;
+    }
+
     .feature {
       padding: 24px;
       border-radius: 24px;
@@ -619,7 +667,8 @@
         padding: 42px 16px;
       }
 
-      .features {
+      .features,
+      .poem-list {
         grid-template-columns: 1fr;
       }
 
@@ -789,6 +838,7 @@
       <div class="nav-links">
         <a href="#konyv" data-i18n="navBook">Könyv</a>
         <a href="#info" data-i18n="navInfo">Infó</a>
+        <a href="#versek" data-i18n="navPoems">Versek</a>
         <button class="btn" type="button" id="openLangBtn" data-i18n="navLang">Nyelv</button>
       </div>
     </nav>
@@ -818,6 +868,25 @@
         <div class="feature"><b data-i18n="f1Title">📖 Lapozható nézet</b><p data-i18n="f1Text">Előző/következő gombokkal, billentyűzettel és oldalszám alapján is lehet navigálni.</p></div>
         <div class="feature"><b data-i18n="f2Title">🔍 Nagyítás</b><p data-i18n="f2Text">Az oldal képére kattintva nagyítható a fotó, így a szöveg könnyebben olvasható.</p></div>
         <div class="feature"><b data-i18n="f3Title">🖨️ Nyomtatás</b><p data-i18n="f3Text">Az aktuális oldal vagy egy teljes oldaltartomány is kinyomtatható.</p></div>
+      </div>
+    </section>
+
+    <section id="versek">
+      <h2 class="section-title" data-i18n="poemsTitle">Versek</h2>
+      <p class="section-desc" data-i18n="poemsDesc">Itt jelennek meg a versek külön URL-ekkel. A címeket a data.js fájlból olvassa be az oldal.</p>
+      <div class="poem-list" id="poemList"></div>
+    </section>
+
+    <section id="poemDetail" class="poem-detail-section" style="display:none;">
+      <div class="poem-detail-card">
+        <button class="btn" id="backToPoemsBtn" type="button">← Versek listája</button>
+        <h2 class="section-title" id="poemDetailTitle">Vers címe</h2>
+        <p class="section-desc" id="poemDetailMeta"></p>
+        <div class="hero-actions">
+          <button class="btn primary" id="openPoemPageBtn" type="button">📖 Oldal megnyitása</button>
+          <button class="btn" id="copyPoemLinkBtn" type="button">🔗 Link másolása</button>
+        </div>
+        <p class="hint" id="copyLinkMessage"></p>
       </div>
     </section>
 
@@ -878,11 +947,14 @@
     const LAST_IMAGE_PAGE = TOTAL_IMAGES;
     const LAST_DISPLAY_PAGE = TOTAL_IMAGES + PAGE_OFFSET;
 
+    const poems = Array.isArray(window.PETOFI_POEMS) ? window.PETOFI_POEMS : [];
+
     const translations = {
       hu: {
         brand: "Petőfi Szerbül",
         navBook: "Könyv",
         navInfo: "Infó",
+        navPoems: "Versek",
         navLang: "Nyelv",
         badge: "📜 Online fordításgyűjtemény",
         heroTitle1: "Petőfi versei",
@@ -897,6 +969,14 @@
         f2Text: "Az oldal képére kattintva nagyítható a fotó, így a szöveg könnyebben olvasható.",
         f3Title: "🖨️ Nyomtatás",
         f3Text: "Az aktuális oldal vagy egy teljes oldaltartomány is kinyomtatható.",
+        poemsTitle: "Versek",
+        poemsDesc: "Itt jelennek meg a versek külön URL-ekkel. A címeket a data.js fájlból olvassa be az oldal.",
+        poemPageText: "oldal",
+        poemListBack: "← Versek listája",
+        openPoemPage: "📖 Oldal megnyitása",
+        copyPoemLink: "🔗 Link másolása",
+        copiedText: "Link kimásolva.",
+        noPoemsText: "Még nincs feltöltve verslista. Hozz létre egy data.js fájlt PETOFI_POEMS listával.",
         bookTitle: "Online könyv",
         bookDesc: "Itt tudod lapozni a könyvet, nagyítani az oldalakat, és oldalakat nyomtatni.",
         printTitle: "Nyomtatás",
@@ -916,6 +996,7 @@
         brand: "Petefi na srpskom",
         navBook: "Knjiga",
         navInfo: "Info",
+        navPoems: "Pesme",
         navLang: "Jezik",
         badge: "📜 Online zbirka prevoda",
         heroTitle1: "Pesme Šandora Petefija",
@@ -930,6 +1011,14 @@
         f2Text: "Klikom na stranicu fotografija se uvećava, pa je tekst lakše čitati.",
         f3Title: "🖨️ Štampanje",
         f3Text: "Možeš štampati trenutnu stranicu ili opseg stranica.",
+        poemsTitle: "Pesme",
+        poemsDesc: "Ovde se prikazuju pesme sa posebnim URL adresama. Naslovi se učitavaju iz data.js fajla.",
+        poemPageText: "stranica",
+        poemListBack: "← Lista pesama",
+        openPoemPage: "📖 Otvori stranicu",
+        copyPoemLink: "🔗 Kopiraj link",
+        copiedText: "Link je kopiran.",
+        noPoemsText: "Lista pesama još nije dodata. Napravi data.js fajl sa PETOFI_POEMS listom.",
         bookTitle: "Online knjiga",
         bookDesc: "Ovde možeš listati knjigu, uvećavati stranice i štampati stranice.",
         printTitle: "Štampanje",
@@ -966,12 +1055,44 @@
     const printTo = document.getElementById("printTo");
     const printMessage = document.getElementById("printMessage");
     const languageScreen = document.getElementById("languageScreen");
+    const poemList = document.getElementById("poemList");
+    const poemDetail = document.getElementById("poemDetail");
+    const poemDetailTitle = document.getElementById("poemDetailTitle");
+    const poemDetailMeta = document.getElementById("poemDetailMeta");
+    const backToPoemsBtn = document.getElementById("backToPoemsBtn");
+    const openPoemPageBtn = document.getElementById("openPoemPageBtn");
+    const copyPoemLinkBtn = document.getElementById("copyPoemLinkBtn");
+    const copyLinkMessage = document.getElementById("copyLinkMessage");
     const openLangBtn = document.getElementById("openLangBtn");
     const langHuBtn = document.getElementById("langHuBtn");
     const langSrBtn = document.getElementById("langSrBtn");
 
     function padPage(num) {
       return String(num).padStart(3, "0");
+    }
+
+    function slugify(text) {
+      return String(text || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[̀-ͯ]/g, "")
+        .replace(/đ/g, "dj")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "") || "vers";
+    }
+
+    function getPoemSlug(poem) {
+      return poem.slug || slugify(poem.titleHu || poem.titleSr || poem.title || `vers-${poem.page}`);
+    }
+
+    function getPoemTitle(poem) {
+      if (currentLang === "sr") return poem.titleSr || poem.title || poem.titleHu || "Pesma";
+      return poem.titleHu || poem.title || poem.titleSr || "Vers";
+    }
+
+    function getPoemUrl(poem) {
+      const slug = getPoemSlug(poem);
+      return `${window.location.origin}${window.location.pathname}?vers=${encodeURIComponent(slug)}`;
     }
 
     function imagePageToDisplayPage(imagePage) {
@@ -1011,6 +1132,13 @@
       safeSetPlaceholder(printFrom, lang === "sr" ? "Od" : "Tól");
       safeSetPlaceholder(printTo, lang === "sr" ? "Do" : "Ig");
 
+      if (backToPoemsBtn) backToPoemsBtn.textContent = translations[lang].poemListBack;
+      if (openPoemPageBtn) openPoemPageBtn.textContent = translations[lang].openPoemPage;
+      if (copyPoemLinkBtn) copyPoemLinkBtn.textContent = translations[lang].copyPoemLink;
+
+      renderPoemList();
+      handlePoemRoute(false);
+
       if (hideScreen && languageScreen) languageScreen.classList.add("hidden");
       updateReader();
     }
@@ -1022,6 +1150,88 @@
 
     function openLanguageScreen() {
       if (languageScreen) languageScreen.classList.remove("hidden");
+    }
+
+    function renderPoemList() {
+      if (!poemList) return;
+      poemList.innerHTML = "";
+
+      if (!poems.length) {
+        poemList.innerHTML = `<p class="hint">${translations[currentLang].noPoemsText}</p>`;
+        return;
+      }
+
+      poems.forEach((poem) => {
+        const link = document.createElement("a");
+        link.className = "poem-link";
+        link.href = getPoemUrl(poem);
+        link.innerHTML = `<strong>${getPoemTitle(poem)}</strong><small>${poem.page}. ${translations[currentLang].poemPageText}</small>`;
+        link.addEventListener("click", (event) => {
+          event.preventDefault();
+          openPoemDetail(poem, true);
+        });
+        poemList.appendChild(link);
+      });
+    }
+
+    function findPoemBySlug(slug) {
+      return poems.find((poem) => getPoemSlug(poem) === slug);
+    }
+
+    function openPoemDetail(poem, pushState = true) {
+      if (!poem) return;
+      const slug = getPoemSlug(poem);
+      const url = `?vers=${encodeURIComponent(slug)}`;
+
+      if (pushState) history.pushState({ poem: slug }, "", url);
+
+      if (poemDetail) poemDetail.style.display = "block";
+      if (poemDetailTitle) poemDetailTitle.textContent = getPoemTitle(poem);
+      if (poemDetailMeta) poemDetailMeta.textContent = `${poem.page}. ${translations[currentLang].poemPageText} • page-${padPage(poem.imagePage || displayPageToImagePage(poem.page))}.jpg`;
+      if (copyLinkMessage) copyLinkMessage.textContent = "";
+
+      const title = getPoemTitle(poem);
+      document.title = `${title} | Petőfi Szerbül`;
+
+      const detailSection = document.getElementById("poemDetail");
+      if (detailSection) detailSection.scrollIntoView({ behavior: "smooth" });
+
+      if (openPoemPageBtn) {
+        openPoemPageBtn.onclick = () => {
+          goToDisplayPage(poem.page);
+          const bookSection = document.getElementById("konyv");
+          if (bookSection) bookSection.scrollIntoView({ behavior: "smooth" });
+        };
+      }
+
+      if (copyPoemLinkBtn) {
+        copyPoemLinkBtn.onclick = async () => {
+          const fullUrl = getPoemUrl(poem);
+          try {
+            await navigator.clipboard.writeText(fullUrl);
+            safeSetText(copyLinkMessage, translations[currentLang].copiedText);
+          } catch (error) {
+            safeSetText(copyLinkMessage, fullUrl);
+          }
+        };
+      }
+    }
+
+    function closePoemDetail(pushState = true) {
+      if (poemDetail) poemDetail.style.display = "none";
+      document.title = "Petőfi Szerbül | Online könyv";
+      if (pushState) history.pushState({}, "", window.location.pathname);
+      const poemsSection = document.getElementById("versek");
+      if (poemsSection) poemsSection.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function handlePoemRoute(scrollToDetail = true) {
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get("vers");
+      if (!slug) return;
+      const poem = findPoemBySlug(slug);
+      if (poem) openPoemDetail(poem, false);
+      if (!scrollToDetail) return;
     }
 
     function updateReader() {
@@ -1125,6 +1335,8 @@
     if (openLangBtn) openLangBtn.addEventListener("click", openLanguageScreen);
     if (langHuBtn) langHuBtn.addEventListener("click", () => setLanguage("hu"));
     if (langSrBtn) langSrBtn.addEventListener("click", () => setLanguage("sr"));
+    if (backToPoemsBtn) backToPoemsBtn.addEventListener("click", () => closePoemDetail(true));
+    window.addEventListener("popstate", () => handlePoemRoute(false));
 
     document.addEventListener("keydown", (event) => {
       if (languageScreen && !languageScreen.classList.contains("hidden")) return;
@@ -1147,6 +1359,8 @@
       console.assert(buildPrintHtml(9, 9).includes("page-004.jpg"), "printing display page 9 should include page-004.jpg");
       console.assert(translations.hu.brand === "Petőfi Szerbül", "Hungarian brand should exist");
       console.assert(translations.sr.brand === "Petefi na srpskom", "Serbian brand should exist");
+      console.assert(slugify("Minek nevezzelek?") === "minek-nevezzelek", "slugify should create clean URL slugs");
+      console.assert(Array.isArray(poems), "poems should be an array from data.js or empty fallback");
     }
 
     const yearEl = document.getElementById("year");
