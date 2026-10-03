@@ -844,7 +844,80 @@
     .flag.mid1 { top: 45%; left: 5%; width: 70px; height: 42px; opacity: 0.08; transform: rotate(12deg); }
     .flag.mid2 { top: 60%; right: 8%; width: 75px; height: 45px; opacity: 0.08; transform: rotate(-10deg); }
 
+  
+    /* Magyar irodalmi, népi ihletésű hero */
+    .hero {
+      max-width: 1180px;
+      min-height: 520px;
+      margin: 42px auto 24px;
+      padding: 78px 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(110, 70, 34, .28);
+      border-radius: 8px;
+      background: linear-gradient(rgba(249,241,220,.97), rgba(242,229,198,.97));
+      box-shadow: 0 18px 55px rgba(40,25,12,.13);
+      color: #302215;
+    }
+    .hero > div { max-width: 820px; position: relative; z-index: 2; }
+    .hero h1 {
+      margin: 0 0 24px;
+      color: #332216;
+      font-size: clamp(54px, 6vw, 82px);
+      line-height: 1.02;
+      letter-spacing: -2.5px;
+      text-shadow: none;
+    }
+    .hero h1 span { color: inherit; }
+    .hero h1 span:last-child { color: #8f2428; font-style: italic; }
+    .hero p {
+      max-width: 720px;
+      margin: 0 auto 32px;
+      color: #665442;
+      font-size: 19px;
+      line-height: 1.8;
+    }
+    .hero-actions { justify-content: center; }
+    .hero .btn.primary {
+      padding: 14px 24px;
+      border: 1px solid #8f2428;
+      border-radius: 4px;
+      color: #fffaf0;
+      background: #8f2428;
+      box-shadow: none;
+      font-size: 16px;
+      letter-spacing: .2px;
+    }
+    .hero .btn.primary:hover { background: #741d20; transform: translateY(-1px); box-shadow: 0 7px 16px rgba(80,30,25,.16); }
+    .folk-ornament {
+      position: absolute;
+      width: 245px;
+      height: 245px;
+      opacity: .72;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .folk-ornament.left { left: 16px; bottom: -30px; }
+    .folk-ornament.right { right: 16px; top: -30px; transform: rotate(180deg); }
+    .folk-divider {
+      display: flex; align-items: center; justify-content: center; gap: 13px;
+      margin: 0 auto 22px; color: #8f2428; font-size: 20px;
+    }
+    .folk-divider::before, .folk-divider::after { content: ""; width: 72px; height: 1px; background: #b69a70; }
+    @media (max-width: 900px) {
+      .hero { margin: 18px 14px 8px; min-height: auto; padding: 58px 26px 54px; }
+      .hero h1 { font-size: clamp(42px, 12vw, 60px); letter-spacing: -1.5px; }
+      .hero p { font-size: 17px; line-height: 1.7; }
+      .folk-ornament { width: 150px; height: 150px; opacity: .35; }
+      .folk-ornament.left { left: -30px; bottom: -24px; }
+      .folk-ornament.right { right: -30px; top: -24px; }
+    }
   </style>
+  <script defer src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
 </head>
 <body>
   <!-- 🇭🇺 Beépített magyar zászlók -->
@@ -866,6 +939,22 @@
       </div>
     </div>
   </div>
+  <script>
+    // Independent language chooser fallback: closes the overlay immediately,
+    // stores the choice, then lets the main script apply translations when available.
+    (function () {
+      var screen = document.getElementById("languageScreen");
+      var hu = document.getElementById("langHuBtn");
+      var sr = document.getElementById("langSrBtn");
+      function choose(lang) {
+        try { localStorage.setItem("petofiLang", lang); } catch (e) {}
+        document.documentElement.lang = lang === "sr" ? "sr" : "hu";
+        if (screen) screen.classList.add("hidden");
+      }
+      if (hu) hu.onclick = function () { choose("hu"); };
+      if (sr) sr.onclick = function () { choose("sr"); };
+    })();
+  </script>
 
   <header>
     <nav>
@@ -882,6 +971,7 @@
       <div class="nav-links">
         <a href="#konyv" data-i18n="navBook">Könyv</a>
         <a href="#info" data-i18n="navInfo">Infó</a>
+        <a href="galeria.html" data-i18n="navGallery">Galéria</a>
         
         <button class="btn" type="button" id="openLangBtn" data-i18n="navLang">Nyelv</button>
       </div>
@@ -890,18 +980,15 @@
 
   <main>
     <div class="hero">
-      
+      <img class="folk-ornament folk-img left" src="disz.png" alt="" aria-hidden="true">
+      <img class="folk-ornament folk-img right" src="disz.png" alt="" aria-hidden="true">
       <div>
-        <div class="badge" data-i18n="badge">📜 Online fordításgyűjtemény</div>
+        <div class="folk-divider" aria-hidden="true">❦</div>
         <h1><span data-i18n="heroTitle1">Petőfi versei</span> <span data-i18n="heroTitle2">szerbül</span></h1>
         <p data-i18n="heroText">Egy modern, lapozható online könyv Petőfi Sándor verseinek szerb fordításaihoz. A befotózott oldalak szépen, mobilon és gépen is olvasható formában jelennek meg.</p>
         <div class="hero-actions">
-          <a class="btn primary" href="#konyv" data-i18n="openBook">📖 Könyv megnyitása</a>
+          <a class="btn primary" href="#konyv" data-i18n="openBook"><i data-lucide="book-open" aria-hidden="true"></i> Könyv megnyitása</a>
         </div>
-      </div>
-
-      <div class="book-card" aria-hidden="true">
-        <img src="front.png" alt="Könyv borító" />
       </div>
     </div>
 
@@ -909,9 +996,8 @@
       <h2 class="section-title" data-i18n="infoTitle">Mit tud az oldal?</h2>
       <p class="section-desc" data-i18n="infoDesc">A cél, hogy a 135 oldalas könyv ne csak feltöltött képek halmaza legyen, hanem egy igényes, lapozható digitális kiadvány.</p>
       <div class="features">
-        <div class="feature"><b data-i18n="f1Title">📖 Lapozható nézet</b><p data-i18n="f1Text">Előző/következő gombokkal, billentyűzettel és oldalszám alapján is lehet navigálni.</p></div>
-        <div class="feature"><b data-i18n="f2Title">🔍 Nagyítás</b><p data-i18n="f2Text">Az oldal képére kattintva nagyítható a fotó, így a szöveg könnyebben olvasható.</p></div>
-        <div class="feature"><b data-i18n="f3Title">🖨️ Nyomtatás</b><p data-i18n="f3Text">Az aktuális oldal vagy egy teljes oldaltartomány is kinyomtatható.</p></div>
+        <div class="feature"><b data-i18n="f1Title"><i data-lucide="book-open" aria-hidden="true"></i> Lapozható nézet</b><p data-i18n="f1Text">Előző/következő gombokkal, billentyűzettel és oldalszám alapján is lehet navigálni.</p></div>
+        <div class="feature"><b data-i18n="f2Title"><i data-lucide="search" aria-hidden="true"></i> Nagyítás</b><p data-i18n="f2Text">Az oldal képére kattintva nagyítható a fotó, így a szöveg könnyebben olvasható.</p></div>        <div class="feature"><b data-i18n="f3Title"><i data-lucide="printer" aria-hidden="true"></i> Nyomtatás</b><p data-i18n="f3Text">Az aktuális oldal vagy egy teljes oldaltartomány is kinyomtatható.</p></div>
       </div>
     </section>
 
@@ -1000,25 +1086,33 @@
 
     const poems = Array.isArray(window.PETOFI_POEMS) ? window.PETOFI_POEMS : [];
 
+    // Ide add meg a videókat. YouTube esetén az embed URL formátuma:
+    // https://www.youtube.com/embed/VIDEO_ID
+
     const translations = {
       hu: {
         brand: "Petőfi Szerbül",
         navBook: "Könyv",
         navInfo: "Infó",
+        navGallery: "Galéria",
+        galleryTitle: "Versvideók",
+        galleryDesc: "Petőfi Sándor versei színészek és előadók tolmácsolásában. A videók a kiválasztott nyelvhez igazodnak.",
+        galleryLanguage: "Magyar előadások",
+        galleryEmpty: "Ide kerülnek a magyar nyelvű versvideók.",
         
         navLang: "Nyelv",
-        badge: "📜 Online fordításgyűjtemény",
+        badge: "Online fordításgyűjtemény",
         heroTitle1: "Petőfi versei",
         heroTitle2: "szerbül",
         heroText: "Egy modern, lapozható online könyv Petőfi Sándor verseinek szerb fordításaihoz. A befotózott oldalak szépen, mobilon és gépen is olvasható formában jelennek meg.",
-        openBook: "📖 Könyv megnyitása",
+        openBook: `<i data-lucide="book-open" aria-hidden="true"></i> Könyv megnyitása`,
         infoTitle: "Mit tud az oldal?",
         infoDesc: "A cél, hogy a 135 oldalas könyv ne csak feltöltött képek halmaza legyen, hanem egy igényes, lapozható digitális kiadvány.",
-        f1Title: "📖 Lapozható nézet",
+        f1Title: `<i data-lucide="book-open" aria-hidden="true"></i> Lapozható nézet`,
         f1Text: "Előző/következő gombokkal, billentyűzettel és oldalszám alapján is lehet navigálni.",
-        f2Title: "🔍 Nagyítás",
+        f2Title: `<i data-lucide="search" aria-hidden="true"></i> Nagyítás`,
         f2Text: "Az oldal képére kattintva nagyítható a fotó, így a szöveg könnyebben olvasható.",
-        f3Title: "🖨️ Nyomtatás",
+        f3Title: `<i data-lucide="printer" aria-hidden="true"></i> Nyomtatás`,
         f3Text: "Az aktuális oldal vagy egy teljes oldaltartomány is kinyomtatható.",
         aboutPetofiTitle: "Petőfi Sándorról",
         aboutPetofiText: `Petőfi Sándor 1823. január 1-jén született Kiskőrösön. Rövidesen Kiskunfélegyházára költöztek, ezért Petőfi ezt a várost tartotta születési helyének. Apja, Petrovics István jómódú mészáros, anyja, Hrúz Mária cselédlány volt.<br><br>Iskolái közül kiemelkedett Aszód, mert itt volt először szerelmes, itt próbálkozott versírással, és itt döntötte el, hogy színésznek áll. 1838-ban a dunai árvíz miatt apja csődbe ment. Petőfi először színésznek, majd később Sopronban katonának állt.<br><br>1841-ben Pápán barátságot kötött Jókai Mórral. Első verse 1842-ben Borozó címmel még Petrovics néven jelent meg. Később magyarosította nevét Petőfire. Többször próbálkozott vándorszínészettel, majd 1844-ben Vörösmarty segítségével a Pesti Divatlap segédszerkesztője lett.<br><br>Megjelent a János vitéz és Az alföld című műve, amelyeknek köszönhetően országos hírű költővé vált. 1845-ben több kritika érte, és ekkor írta a Felhők-ciklus verseit.<br><br>1846-ban Erdődön megismerkedett Szendrey Júliával. Ekkor írta több híres versét is, például a Reszket a bokor, mert..., az Egy gondolat bánt engemet és a Szabadság, szerelem! című műveket.<br><br>1847 szeptemberében házasodtak össze. A mézeshetek alatt írta a Szeptember végén című verset. Az 1848-as forradalom idején Petőfi vezető szerepet vállalt, legismertebb forradalmi műve a Nemzeti dal.<br><br>1849-ben Bem József seregéhez csatlakozott. 1849. július 31-én Segesvárnál tűnt el a csatában, és a magyar történelem egyik legismertebb költőjeként emlékezünk rá.`, 
@@ -1041,20 +1135,25 @@
         brand: "Petefi na srpskom",
         navBook: "Knjiga",
         navInfo: "Info",
+        navGallery: "Galerija",
+        galleryTitle: "Video izvođenja pesama",
+        galleryDesc: "Pesme Šandora Petefija u izvođenju glumaca i recitatora. Video-snimci se menjaju prema izabranom jeziku.",
+        galleryLanguage: "Izvođenja na srpskom",
+        galleryEmpty: "Ovde će biti video-snimci recitacija na srpskom jeziku.",
         
         navLang: "Jezik",
-        badge: "📜 Online zbirka prevoda",
+        badge: "Online zbirka prevoda",
         heroTitle1: "Pesme Šandora Petefija",
         heroTitle2: "na srpskom",
         heroText: "Moderna online knjiga za srpske prevode pesama Šandora Petefija. Fotografisane stranice se prikazuju lepo i čitljivo na telefonu i računaru.",
-        openBook: "📖 Otvori knjigu",
+        openBook: `<i data-lucide="book-open" aria-hidden="true"></i> Otvori knjigu`,
         infoTitle: "Šta nudi stranica?",
         infoDesc: "Cilj je da knjiga od 136 stranica ne bude samo skup slika, već lepo digitalno izdanje koje može da se lista.",
-        f1Title: "📖 Listanje stranica",
+        f1Title: `<i data-lucide="book-open" aria-hidden="true"></i> Listanje stranica`,
         f1Text: "Možeš koristiti dugmad prethodna/sledeća, tastaturu ili unos broja stranice.",
-        f2Title: "🔍 Uvećanje",
+        f2Title: `<i data-lucide="search" aria-hidden="true"></i> Uvećanje`,
         f2Text: "Klikom na stranicu fotografija se uvećava, pa je tekst lakše čitati.",
-        f3Title: "🖨️ Štampanje",
+        f3Title: `<i data-lucide="printer" aria-hidden="true"></i> Štampanje`,
         f3Text: "Možeš štampati trenutnu stranicu ili opseg stranica.",
         aboutPetofiTitle: "O Šandoru Petefiju",
         aboutPetofiText: `Šandor Petefi rođen je 1. januara 1823. godine u Kiškeresu. Ubrzo nakon toga njegova porodica se preselila u Kiškunfelenjhazu, pa je Petefi taj grad smatrao svojim rodnim mestom. Njegov otac, Ištvan Petrović, bio je imućni mesar, dok je njegova majka Marija Hrúz radila kao služavka.<br><br>Među školama koje je pohađao posebno se isticao Ašod, jer se tamo prvi put zaljubio, počeo da piše pesme i odlučio da postane glumac. Godine 1838. njegov otac je bankrotirao zbog velike poplave Dunava. Petefi je najpre radio kao glumac, a kasnije je postao vojnik u Šopronu.<br><br>Godine 1841. u Papi se sprijateljio sa Morom Jokaiem. Njegova prva pesma, Borozó, objavljena je 1842. godine pod prezimenom Petrović. Kasnije je promenio ime u Petefi. Više puta je pokušavao da radi kao putujući glumac, a 1844. godine, uz pomoć Mihalja Vöröšmartija, postao je pomoćni urednik lista Pesti Divatlap.<br><br>Objavljena su njegova dela Janoš Vitez i Alföld, zahvaljujući kojima je postao poznat širom zemlje. Godine 1845. bio je izložen mnogim kritikama, a tada je napisao ciklus pesama Oblaci.<br><br>Godine 1846. upoznao je Juliju Sendrei u Erdedu. Tada je napisao i nekoliko svojih poznatih pesama, među kojima su Reszket a bokor, mert..., Jedna misao me muči i Sloboda, ljubav!.<br><br>U septembru 1847. godine venčao se sa Julijom. Tokom medenog meseca napisao je pesmu Krajem septembra. Tokom revolucije 1848. godine Petefi je imao vodeću ulogu, a njegovo najpoznatije revolucionarno delo je Nacionalna pesma.<br><br>Godine 1849. pridružio se vojsci Jožefa Bema. Dana 31. jula 1849. nestao je u bici kod Šegešvara i ostao upamćen kao jedan od najpoznatijih mađarskih pesnika.`, 
@@ -1166,6 +1265,8 @@
         const key = el.getAttribute("data-i18n");
         if (translations[lang][key]) el.innerHTML = translations[lang][key];
       });
+
+      if (window.lucide) lucide.createIcons();
 
       safeSetPlaceholder(pageInput, translations[lang].pagePlaceholder);
       safeSetPlaceholder(printFrom, lang === "sr" ? "Od" : "Tól");
@@ -1299,7 +1400,28 @@
         pagesHtml += `<div class="print-page"><img src="${getPageSrc(imagePage)}" alt="Oldal ${imagePageToDisplayPage(imagePage)}"><div>${imagePageToDisplayPage(imagePage)}. oldal</div></div>`;
       }
 
-      return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Nyomtatás</title><style>body{margin:0;background:white;color:black;font-family:Georgia,'Times New Roman',serif}.print-page{page-break-after:always;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px;box-sizing:border-box}.print-page img{max-width:100%;max-height:92vh;object-fit:contain}.print-page div{font-size:14px;margin-top:8px}@media print{.print-page{page-break-after:always}}</style></head><body>${pagesHtml}<script>window.onload=function(){window.focus();window.print();};<\/script></body></html>`;
+      return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Nyomtatás</title><style>body{margin:0;background:white;color:black;font-family:Georgia,'Times New Roman',serif}.print-page{page-break-after:always;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px;box-sizing:border-box}.print-page img{max-width:100%;max-height:92vh;object-fit:contain}.print-page div{font-size:14px;margin-top:8px}@media print{.print-page{page-break-after:always}}</style>  
+</head><body>${pagesHtml}<script>window.onload=function(){window.focus();window.print();};<\/script>
+<style>
+/* Mesenapok ornament assets + language chooser fix */
+.folk-ornament.folk-img {
+  position:absolute; width:min(34vw,360px); height:auto; object-fit:contain;
+  opacity:.20; pointer-events:none; user-select:none; z-index:0; filter:sepia(.15);
+}
+.folk-ornament.folk-img.left { left:-72px; bottom:-42px; transform:none; }
+.folk-ornament.folk-img.right { right:-60px; top:-34px; transform:scaleX(-1); }
+.hero > *:not(.folk-ornament) { position:relative; z-index:1; }
+.language-screen.hidden { display:none !important; opacity:0 !important; visibility:hidden !important; pointer-events:none !important; }
+.language-screen:not(.hidden) { display:grid !important; visibility:visible !important; pointer-events:auto !important; }
+@media (max-width:900px){
+ .folk-ornament.folk-img{width:210px;opacity:.12}
+ .folk-ornament.folk-img.left{left:-90px;bottom:-20px}
+ .folk-ornament.folk-img.right{right:-95px;top:-10px}
+}
+@media (max-width:520px){.folk-ornament.folk-img{width:155px;opacity:.09}}
+</style>
+
+</body></html>`;
     }
 
     function buildPrintWindow(fromDisplayPage, toDisplayPage) {
@@ -1407,6 +1529,264 @@
 
     runTests();
     applyLanguage(currentLang, false);
+  
+    document.addEventListener("DOMContentLoaded", () => { if (window.lucide) lucide.createIcons(); });
   </script>
+
+<style>
+/* Mesenapok ornament assets + language chooser fix */
+.folk-ornament.folk-img {
+  position:absolute; width:min(34vw,360px); height:auto; object-fit:contain;
+  opacity:.20; pointer-events:none; user-select:none; z-index:0; filter:sepia(.15);
+}
+.folk-ornament.folk-img.left { left:-72px; bottom:-42px; transform:none; }
+.folk-ornament.folk-img.right { right:-60px; top:-34px; transform:scaleX(-1); }
+.hero > *:not(.folk-ornament) { position:relative; z-index:1; }
+.language-screen.hidden { display:none !important; opacity:0 !important; visibility:hidden !important; pointer-events:none !important; }
+.language-screen:not(.hidden) { display:grid !important; visibility:visible !important; pointer-events:auto !important; }
+@media (max-width:900px){
+ .folk-ornament.folk-img{width:210px;opacity:.12}
+ .folk-ornament.folk-img.left{left:-90px;bottom:-20px}
+ .folk-ornament.folk-img.right{right:-95px;top:-10px}
+}
+@media (max-width:520px){.folk-ornament.folk-img{width:155px;opacity:.09}}
+</style>
+
 </body>
 </html>
+
+<!-- Natural editorial redesign overrides -->
+<style>
+:root {
+  --bg: #f2eee4;
+  --bg2: #e9e2d4;
+  --card: #faf7ef;
+  --text: #26221d;
+  --muted: #6e665b;
+  --gold: #8a642f;
+  --gold2: #6f4d24;
+  --shadow: 0 12px 32px rgba(47, 39, 28, .10);
+}
+* { font-family: Georgia, 'Times New Roman', serif; }
+body {
+  color: var(--text);
+  background: #f2eee4;
+}
+body::before, .grain, .flag { display: none !important; }
+header {
+  background: rgba(242,238,228,.96);
+  border-bottom: 1px solid #d7cfbf;
+  backdrop-filter: none;
+}
+nav { padding-top: 14px; padding-bottom: 14px; }
+.logo { letter-spacing: 0; }
+.logo-mark {
+  border-radius: 3px;
+  background: transparent;
+  box-shadow: none;
+}
+.nav-links a, .btn {
+  color: #332d26;
+  background: transparent;
+  border: 1px solid #bdb3a2;
+  border-radius: 4px;
+  box-shadow: none;
+  transition: background .15s ease, border-color .15s ease;
+}
+.nav-links a:hover, .btn:hover {
+  transform: none;
+  background: #e8e0d2;
+  border-color: #8d806d;
+  box-shadow: none;
+}
+.btn.primary {
+  color: #fffaf0;
+  background: #75552d;
+  border: 1px solid #75552d;
+}
+.btn.primary:hover { background: #624522; }
+.language-screen {
+  background: rgba(35,31,26,.94);
+  backdrop-filter: none;
+}
+.language-box {
+  max-width: 620px;
+  padding: 42px 36px;
+  border-radius: 4px;
+  background: #f6f1e7;
+  border: 1px solid #cfc4b2;
+  box-shadow: 0 20px 60px rgba(0,0,0,.28);
+}
+.language-box h1 { color: #4c3822; font-size: clamp(36px, 6vw, 58px); }
+.language-box p { color: #70675b; }
+.hero {
+  min-height: 70vh;
+  padding-top: 72px;
+  padding-bottom: 72px;
+  gap: 70px;
+}
+.badge {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #80633c;
+  font-size: 14px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+h1 {
+  color: #28231e;
+  font-size: clamp(44px, 7vw, 78px);
+  line-height: 1.02;
+  letter-spacing: -2px;
+  text-shadow: none;
+}
+h1 span, .gold { color: inherit; }
+.hero p, .section-desc { color: #665e53; line-height: 1.75; }
+.book-card {
+  min-height: 480px;
+  transform: rotate(1deg);
+  animation: none;
+}
+.book-card img {
+  height: min(72vh, 680px) !important;
+  border-radius: 2px !important;
+  filter: drop-shadow(12px 20px 20px rgba(42,34,25,.24));
+}
+.book-card::after { display: none; }
+section { padding-top: 78px; padding-bottom: 78px; }
+.section-title {
+  color: #302a23;
+  font-size: clamp(30px, 4vw, 48px);
+  letter-spacing: -.8px;
+}
+.features { gap: 1px; background: #cfc5b5; border: 1px solid #cfc5b5; }
+.feature {
+  border: 0;
+  border-radius: 0;
+  background: #f8f4eb;
+  box-shadow: none;
+  padding: 28px;
+}
+.feature b { color: #5f4527; font-size: 20px; }
+.feature p { color: #6a6257; }
+.petofi-book-layout {
+  border-radius: 2px;
+  background: #f8f4eb;
+  border: 1px solid #cec4b3;
+  box-shadow: none;
+}
+.petofi-title-ribbon {
+  margin-right: 0;
+  padding: 20px 28px;
+  clip-path: none;
+  background: #ded2bd;
+  color: #342b21;
+  border-bottom: 1px solid #c8baa4;
+}
+.petofi-title-ribbon span { display: none; }
+.petofi-article { background: transparent; }
+.petofi-portrait-inline {
+  padding: 6px;
+  border-radius: 1px;
+  background: #fff;
+  border: 1px solid #c8bdac;
+  box-shadow: 0 8px 20px rgba(55,45,33,.12);
+}
+.petofi-portrait-inline img { border-radius: 0; }
+.reader-shell {
+  border-radius: 3px;
+  padding: 18px;
+  background: #e8e0d2;
+  border: 1px solid #c8bdac;
+  box-shadow: none;
+}
+input {
+  color: #302a23;
+  background: #faf7ef;
+  border: 1px solid #bdb2a0;
+  border-radius: 4px;
+}
+input:focus { border-color: #80633c; box-shadow: 0 0 0 2px rgba(128,99,60,.12); }
+.page-counter {
+  color: #493722;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+.book-view {
+  border-radius: 2px;
+  background: #d7cebf;
+  border: 1px solid #bfb3a1;
+}
+.book-view::before { display: none; }
+.reader-arrow {
+  width: 48px;
+  height: 48px;
+  border-radius: 3px;
+  border: 1px solid #9e917e;
+  background: rgba(246,241,231,.94);
+  color: #4c3822;
+  box-shadow: 0 4px 14px rgba(0,0,0,.12);
+  backdrop-filter: none;
+}
+.reader-arrow:hover { transform: translateY(-50%); border-color: #6e604d; box-shadow: 0 4px 14px rgba(0,0,0,.12); }
+.page-img { border-radius: 1px; box-shadow: 0 12px 30px rgba(42,34,25,.18); }
+.print-panel {
+  border-radius: 2px;
+  background: #f5f0e7;
+  border: 1px solid #c8bdac;
+}
+.print-panel h3 { color: #493722; }
+footer {
+  color: #756d61;
+  background: #e7dfd1;
+  border-top: 1px solid #ccc1b0;
+}
+@media (max-width: 900px) {
+  .hero { min-height: auto; gap: 28px; }
+  .book-card { animation: none; }
+  .features { gap: 1px; }
+  .reader-shell, .language-box, .feature, .print-panel { border-radius: 2px; }
+}
+</style>
+
+<style>
+/* 2026-10 mobile/content cleanup */
+.hero { grid-template-columns: 1fr !important; max-width: 900px; }
+.hero > div:first-child { max-width: 820px; }
+@media (max-width: 900px) {
+  #petofirol { padding-top: 30px; padding-bottom: 38px; }
+  .petofi-book-layout { border-radius: 16px; overflow: hidden; }
+  .petofi-title-ribbon { padding: 14px 16px; }
+  .petofi-title-ribbon h2 { font-size: clamp(27px, 8vw, 36px); line-height: 1.08; }
+  .petofi-title-ribbon span { display: none; }
+  .about-card { padding: 18px 16px; font-size: 16px; line-height: 1.65; }
+  .petofi-portrait-inline {
+    float: right;
+    width: min(38%, 150px);
+    margin: 2px 0 12px 16px;
+    padding: 6px;
+    border-radius: 10px;
+  }
+  .petofi-portrait-inline img { border-radius: 7px; }
+  .petofi-portrait-inline figcaption { font-size: 11px; line-height: 1.3; margin-top: 6px; }
+}
+@media (max-width: 520px) {
+  .petofi-portrait-inline {
+    float: none;
+    width: min(62vw, 210px);
+    margin: 0 auto 16px;
+  }
+  .about-card { padding: 16px 14px; font-size: 15.5px; line-height: 1.62; }
+}
+
+    /* Egységes SVG ikonok */
+    .btn svg, .feature b svg {
+      width: 1.05em; height: 1.05em; stroke-width: 1.8;
+      vertical-align: -0.16em; margin-right: .42em; flex: 0 0 auto;
+    }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0; }
+    .feature b { display: flex; align-items: center; gap: .15em; }
+</style>
