@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Galéria | Petőfi Sándor versei</title>
+<style>
+:root{--ink:#2a2118;--paper:#f3ead7;--paper2:#e8dcc3;--red:#8f2f2f;--green:#365d3d;--gold:#9b7334;--line:#cbbd9e}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:Georgia,'Times New Roman',serif}
+header{border-bottom:1px solid var(--line);background:rgba(243,234,215,.96);position:sticky;top:0;z-index:10}.nav{max-width:1180px;margin:auto;padding:15px 22px;display:flex;justify-content:space-between;align-items:center;gap:18px}.brand{font-weight:800;font-size:20px}.links{display:flex;gap:10px;align-items:center;flex-wrap:wrap}a,button{font:inherit}.nav a,.lang{color:var(--ink);text-decoration:none;border:1px solid var(--line);background:#f8f1e3;padding:9px 13px;border-radius:8px;cursor:pointer}.lang.active{background:var(--red);color:#fff;border-color:var(--red)}
+main{max-width:1180px;margin:auto;padding:55px 22px 80px}.hero{text-align:center;position:relative;padding:35px 120px 45px;border-bottom:1px solid var(--line);margin-bottom:38px}.hero h1{font-size:clamp(40px,6vw,70px);margin:0 0 14px;letter-spacing:-2px}.hero p{font-size:18px;line-height:1.7;max-width:760px;margin:auto;color:#675947}.orn{position:absolute;top:50%;width:105px;max-height:150px;object-fit:contain;transform:translateY(-50%)}.orn.left{left:0}.orn.right{right:0;transform:translateY(-50%) scaleX(-1)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.card{background:#f8f1e3;border:1px solid var(--line);box-shadow:0 8px 24px rgba(70,50,25,.08);overflow:hidden}.frame{aspect-ratio:16/9;background:#241f19}.frame iframe{width:100%;height:100%;border:0;display:block}.body{padding:18px 20px}.body h2{font-size:22px;margin:0 0 7px}.body p{margin:0;color:#75654f}.video-link{aspect-ratio:16/9;background:#2b241c;display:flex;align-items:center;justify-content:center;text-decoration:none;color:#fff;position:relative;overflow:hidden}.video-link img{width:100%;height:100%;object-fit:cover;display:block;opacity:.82}.video-link .play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}.play{width:70px;height:70px;border:1px solid #d8c8a7;border-radius:50%;display:grid;place-items:center;background:#8f2f2f}.play svg{width:28px;height:28px;fill:currentColor;margin-left:4px}.source{display:inline-block;margin-top:12px;color:var(--red);font-size:14px}.audio-frame{aspect-ratio:16/9;background:#2b241c;color:#f8f1e3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:25px}.audio-frame audio{width:min(90%,430px)}.audio-mark{font-size:22px}.source-cover{aspect-ratio:16/9;background:#2b241c;color:#f8f1e3;display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;text-decoration:none}.source-cover:hover{background:#382e24}.empty{text-align:center;padding:40px;border:1px dashed var(--line);color:#75654f}.back{display:inline-block;margin-top:32px;color:var(--red)}
+@media(max-width:700px){.nav{padding:12px 14px}.brand{font-size:16px}.hero{padding:24px 54px 32px}.hero h1{font-size:38px}.hero p{font-size:16px}.orn{width:48px}.grid{grid-template-columns:1fr}main{padding:35px 14px 60px}.links{gap:6px}.nav a,.lang{padding:8px 9px;font-size:14px}}
+</style>
+</head><body>
+<header><div class="nav"><div class="brand">Petőfi Sándor</div><div class="links"><a href="index.html">Főoldal</a></div></div></header>
+<main><section class="hero"><img class="orn left" src="disz.png" alt=""><img class="orn right" src="disz.png" alt=""><h1>Galéria</h1><p>Petőfi Sándor versei magyar színészek és előadók tolmácsolásában.</p></section><div class="grid" id="grid"></div><a class="back" href="index.html">← Vissza a főoldalra</a></main>
+<script>
+const videos=[
+ {title:"Füstbement terv",performer:"Latinovits Zoltán",youtube:"al9SVuaWATE"},
+ {title:"Az alföld",performer:"Latinovits Zoltán",youtube:"6ppEiOOHHLM"},
+ {title:"Szülőföldemen",performer:"Pelsőczy László",youtube:"7LG-6KfjNbM"},
+ {title:"Magyar vagyok",performer:"Latinovits Zoltán",youtube:"3w2Kasb13Wk"},
+ {title:"Szeptember végén",performer:"Déri Tamás",indavideo:"a3d355dead"},
+ {title:"Nemzeti dal",performer:"Sinkovits Imre",youtube:"RMapAjrIs58"},
+ {title:"Anyám tyúkja",performer:"Koltai Róbert",audio:"https://momoradio.hu/wp-content/uploads/Media/versek2/v-0067-Petofi-Sandor--Anyam-tyukja-Koltai-Robert.mp3"},
+ {title:"A négyökrös szekér",performer:"Csőre Gábor",youtube:"CTj3VxL32dg"},
+ {title:"A XIX. század költői",performer:"Barbinek Péter",youtube:"jFZL67NFhj4"}
+];
+const grid=document.getElementById('grid');
+function esc(x){return x.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+for(const v of videos){
+ const card=document.createElement('article'); card.className='card';
+ let media='';
+ if(v.youtube){media=`<div class="frame"><iframe src="https://www.youtube-nocookie.com/embed/${v.youtube}?rel=0" title="${esc(v.title)}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;}
+ else if(v.indavideo){media=`<div class="frame"><iframe src="https://embed.indavideo.hu/player/video/${v.indavideo}" title="${esc(v.title)}" loading="lazy" allowfullscreen></iframe></div>`;}
+ else if(v.audio){media=`<div class="audio-frame"><div class="audio-mark">Versfelvétel</div><audio controls preload="none" src="${v.audio}"></audio></div>`;}
+ else {media=`<a class="source-cover" href="${v.source}" target="_blank" rel="noopener"><span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span><span>Felvétel megnyitása</span></a>`;}
+ card.innerHTML=media+`<div class="body"><h2>${esc(v.title)}</h2><p>${esc(v.performer)} előadásában</p></div>`;
+ grid.appendChild(card);
+}
+</script></body></html>
